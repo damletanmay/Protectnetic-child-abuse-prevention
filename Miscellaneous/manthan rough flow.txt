@@ -1,0 +1,9 @@
+0. Searching for keyworks and getting links ! 
+1. Collecting Links ()
+2. Crawling links (skip)
+3. Scraping links (fetching relevent info / Titles / Images / Text in general)
+4. Analysis of collected information !
+5. Make A website
+6. Done
+MAIN PAGE
+
