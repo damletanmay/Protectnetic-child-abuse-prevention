@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    {% load static %}
+  <head>
+    <meta charset="utf-8">
+    <title>
+    {% block title %}
+    {% endblock %}
+  </title>
+
+  {% block links %}
+  {% endblock %}
+
+  </head>
+  <body>
+    <nav>
+      <ul>
+      <a href="{% url 'index' %}">Home</a>
+      <a href="{% url 'search' %}">Search</a>
+      <a href="{% url 'report' %}">Report</a>
+    </ul>
+    </nav>
+    {% block content %}
+    {% endblock %}
+  </body>
+</html>
