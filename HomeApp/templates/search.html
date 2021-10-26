@@ -9,5 +9,40 @@ Search
 {% endblock %}
 
 {% block content %}
-[[ - A Search Bar & A Submit Button for user input of onion website. - ]]
+
+  {% if msg %}
+    {{ msg }}
+  {% endif %}
+
+<div class="container">
+  <br>
+  <br>
+  <form class="" action="{% url 'search' %}" method="post">
+    {% csrf_token %}
+    <label for="link">Drop An Onion Link</label>
+    <input type="textarea" accept="image/jpeg" name="link" value="" required>
+    <button type="submit" name="button_link" value="button_link">Submit Link</button>
+  </form>
+  <br>
+  OR
+  <br>
+  <br>
+  <form class="" action="{% url 'search' %}" method="post">
+    {% csrf_token %}
+    <label for="txt">Drop Text File which has multiple onlion links</label>
+    <input type="file" accept=".txt" name="txt" value="" required>
+    <button type="submit" name="button_txt" value="button_txt">Submit</button>
+  </form>
+  OR
+  <br>
+  <br>
+  <form class="" action="{% url 'search' %}" method="post">
+    {% csrf_token %}
+    <label for="csv">Drop CSV File which has multiple onlion links</label>
+    <input type="file" accept=".csv" name="csv" value="" required>
+    <button type="submit" name="button_csv" value="button_csv">Submit</button>
+  </form>
+
+
+</div>
 {% endblock %}
