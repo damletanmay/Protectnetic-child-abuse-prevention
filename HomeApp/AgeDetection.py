@@ -5,7 +5,7 @@ import time
 import os
 import glob
 from os.path import dirname, join
-
+from .PDetector import p_detect
 
 def getFaceBox(net, frame, conf_threshold=0.7):
     frameOpencvDnn = frame.copy()
@@ -57,23 +57,51 @@ def process_images(path):
     ageProto = join(dirname(__file__), r"models\age_deploy.prototxt")
     ageModel = join(dirname(__file__), r"models\age_net.caffemodel")
 
-    # print(path)
-    # print(ageProto)
-    # print(ageModel)
+    ageNet = cv.dnn.readNet(ageModel, ageProto)
+    faceNet = cv.dnn.readNet(faceModel, faceProto)
+
+    print(path)
+    print(ageProto)
+    print(ageModel)
 
     # Load network
-    try:
-        ageNet = cv.dnn.readNet(ageModel, ageProto)
-        faceNet = cv.dnn.readNet(faceModel, faceProto)
-        img_paths = glob.glob(path + r'/*.jpg')
-        age = []
-        for img in img_paths:
-            input = cv.imread(img)
-            x = age_gender_detector(input, ageNet, faceNet, padding, MODEL_MEAN_VALUES, ageList)
-            age.append(x)
-        return age
-    except Exception as e:
-        print(e)
-        return -1
 
+    print(ageNet)
+    print(faceNet)
+    img_paths = glob.glob(path + r'/*.jpg')
+
+
+    analysis = {}
+
+    for img in img_paths:
+        input = cv.imread(img)
+        try:
+            age_prediction = age_gender_detector(input, ageNet, faceNet, padding, MODEL_MEAN_VALUES, ageList)
+            print(age_prediction)
+
+            if age_prediction:
+                if age_prediction == '(0-2)' or age_prediction == '(4-6)' or age_prediction == '(8-12)' or age_prediction ==  '(15-20)':
+                    # child detected
+                    print('here')
+                    try:
+                        predictions = p_detect(img)
+                        print(predictions)
+                        analysis[img] = predictions[0][img]
+                        analysis[img]['age'] = age_prediction
+
+                    except Exception as ex:
+                            print("Exception in P- Detect:")
+                            print(ex)
+                            continue
+                else:
+                    continue
+            else:
+                continue
+        except Exception as ex:
+                print("Exception in Age Prediction:")
+                print(ex)
+                continue
+
+
+    return analysis
 # print(process_image(path))

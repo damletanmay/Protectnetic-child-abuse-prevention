@@ -1,9 +1,8 @@
 from django.shortcuts import render, redirect
 from .AgeDetection import process_images
-from .PDetector import p_detect
 import os
 from . import getImages
-
+import pprint
 
 def root(request):
     return render(request, 'index.html')
@@ -19,20 +18,23 @@ def handle_link(request):
     get_images_session_obj = getImages.GetImages(link)
 
     print('[NOTE] Please wait until all the images are downloaded !')
-    
+
     while not get_images_session_obj.ARE_ALL_IMAGES_DOWNLOADED:
         pass
 
     print('[NOTE] Now we are beginning with our child abuse analysis based on scraped Images !')
 
     path = os.path.join(os.getcwd(),'images')
-    age_array = process_images(path)
-    print(age_array)
-    if age_array:
-        predictions = p_detect(path)
-        for i in predictions:
-            print(i)
-        return render(request, 'search.html')
+    results = process_images(path)
+    pprint.pprint(results)
+    if results!= {}:
+        pprint.pprint(results)
+        for path,d in results.items():
+            p_percent = int(d['porn'] * 100)
+            if p_percent > 50:
+                return render(request, 'search.html',{'msg':'Child Abusive Content Found!'})
+            else:
+                return render(request, 'search.html',{'msg':'Child Abusive Content Not Found!'})
     else:
         return render(request, 'search.html', {'error': 'Some Error Occured!'})
 

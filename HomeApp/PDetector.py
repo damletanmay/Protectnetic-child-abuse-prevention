@@ -1,4 +1,3 @@
-import glob
 import json
 from os import listdir
 from os.path import isfile, join, exists, isdir, abspath,dirname, join
@@ -67,12 +66,13 @@ def classify_nd(model, nd_images):
 
 def p_detect(path):
     IMAGE_DIM = 224   # required/default image dimensionality
-    img_paths  = glob.glob(path+r'/*.jpg')
     predictions = []
-    for img_path in img_paths:
-        model_path = join(dirname(__file__),r"models\PDetector.h5")
-        model = load_model(model_path)
-        image_preds = classify(model, img_path, IMAGE_DIM)
-        predictions.append(image_preds)
+    model_path = join(dirname(__file__),r"models\PDetector.h5")
+    print(model_path)
+    model = load_model(model_path)
+    print(model)
+
+    image_preds = classify(model,path, IMAGE_DIM)
+    predictions.append(image_preds)
 
     return predictions
