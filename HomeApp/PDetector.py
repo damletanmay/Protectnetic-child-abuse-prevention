@@ -71,7 +71,6 @@ def p_detect(path):
     print(model_path)
     model = load_model(model_path)
     print(model)
-
     image_preds = classify(model,path, IMAGE_DIM)
     predictions.append(image_preds)
 

@@ -88,6 +88,9 @@ def process_images(path):
                         print(predictions)
                         analysis[img] = predictions[0][img]
                         analysis[img]['age'] = age_prediction
+                        print(analysis)
+                        if len(analysis == 2):
+                            break
 
                     except Exception as ex:
                             print("Exception in P- Detect:")
@@ -101,7 +104,6 @@ def process_images(path):
                 print("Exception in Age Prediction:")
                 print(ex)
                 continue
-
 
     return analysis
 # print(process_image(path))

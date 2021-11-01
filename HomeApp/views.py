@@ -14,6 +14,7 @@ def root(request):
 def handle_link(request):
     # save scraped images in /images folder then ...
     print(dict(request.POST.items()))
+    # take csrf token name & make a folder of that name in it & download images there
     link = request.POST.get('link')
     get_images_session_obj = getImages.GetImages(link)
 
@@ -28,7 +29,6 @@ def handle_link(request):
     results = process_images(path)
     pprint.pprint(results)
     if results!= {}:
-        pprint.pprint(results)
         for path,d in results.items():
             p_percent = int(d['porn'] * 100)
             if p_percent > 50:
