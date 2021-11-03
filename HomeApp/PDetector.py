@@ -1,10 +1,11 @@
+import os
 import json
-from os import listdir
-from os.path import isfile, join, exists, isdir, abspath,dirname, join
 import numpy as np
+from os import listdir
 import tensorflow as tf
-from tensorflow import keras
 import tensorflow_hub as hub
+from tensorflow import keras
+from os.path import isfile, join, exists, isdir, abspath,dirname, join
 
 
 def load_images(image_paths, image_size, verbose=True):
@@ -67,10 +68,8 @@ def classify_nd(model, nd_images):
 def p_detect(path):
     IMAGE_DIM = 224   # required/default image dimensionality
     predictions = []
-    model_path = join(dirname(__file__),r"models\PDetector.h5")
-    print(model_path)
+    model_path = os.path.join(os.path.join(os.path.join(os.getcwd(),"HomeApp"),"models"),'PDetector.h5')
     model = load_model(model_path)
-    print(model)
     image_preds = classify(model,path, IMAGE_DIM)
     predictions.append(image_preds)
 
