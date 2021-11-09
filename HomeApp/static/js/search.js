@@ -56,4 +56,4 @@ function customProgress(progressBarElement, progressBarMessageElement, progress)
         return false;
       }
     }
-  }
+}

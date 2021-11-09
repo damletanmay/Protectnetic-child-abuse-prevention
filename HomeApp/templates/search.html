@@ -9,84 +9,121 @@ Search
 <script src="{% static 'js/search.js' %}" charset="utf-8"></script>
 <script src="{% static 'celery_progress/celery_progress.js' %}"></script>
 <script type="text/javascript">
-  document.addEventListener("DOMContentLoaded", function () {
-      {% if task_id %}
-      var progressUrl = "{% url 'celery_progress:task_status' task_id %}";
-      CeleryProgressBar.initProgressBar(progressUrl,{
-        onProgress: customProgress,
-        onSuccess: customSuccess,
-        onError: customError,
-        barColors:customBarColors,
-      });
-      console.log(CeleryProgressBar);
-      {% endif %}
+    document.addEventListener("DOMContentLoaded", function () {
+        {% if task_id %}
+        var progressUrl = "{% url 'celery_progress:task_status' task_id %}";
+        CeleryProgressBar.initProgressBar(progressUrl, {
+            onProgress: customProgress,
+            onSuccess: customSuccess,
+            onError: customError,
+            barColors: customBarColors,
+        });
+        console.log(CeleryProgressBar);
+        {% endif %}
     });
 </script>
 {% endblock %}
 
 {% block content %}
 
-
-<div class="container">
-
-    {% if msg %}
-    <h1>{{ msg }}</h1>
-    {% endif %}
+{% if msg %}
+    <h3 class="alert alert-primary">{{ msg }}</h3>
+{% endif %}
 
 
-    {% if error %}
-    <h1>{{ error }}</h1>
-    {% endif %}
+{% if error %}
+    <h3 class="alert alert-danger">{{ error }}</h3>
+{% endif %}
 
+<div class="container text-center">
     <div class='progress-wrapper'>
-      <div id='progress-bar' class='progress-bar' style="background-color: #68a9ef; width: 0%;">&nbsp;</div>
+        <div id='progress-bar' class='progress-bar' style="background-color: #68a9ef; width: 0%;">&nbsp;</div>
     </div>
 
     <div id="progress-bar-message"></div>
     <div id="celery-result"></div>
 
-  <br>
-  <br>
-  <form class="" name="link_form" onsubmit="return check_link()" action="{% url 'search' %}" method="post">
-    {% csrf_token %}
-    <label for="link">Drop An Onion Link</label>
-    <input type="textarea" accept="image/jpeg" name="link" value="">
-    <button type="submit" data-toggle="modal"  data-target ="#modal" name="button_link" value="button_link" class="btn btn-primary" >Submit Link</button>
+    <form class="" name="link_form" onsubmit="return check_link()" action="{% url 'search' %}" method="post">
+        {% csrf_token %}
 
-<!-- Modal -->
-<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modal_text" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modal_text"></h5>
-      </div>
-      <div class="modal-body">
-      </div>
-    </div>
-  </div>
-</div>
+        <p style="text-align:left; margin: 0% 13%;">Drop an Onion Link</p>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text">Enter Link</span>
+            </div>
 
-  </form>
-  <br>
-  OR
-  <br>
-  <br>
-  <form class="" action="{% url 'search' %}" method="post">
-    {% csrf_token %}
-    <label for="txt">Drop Text File which has multiple onlion links</label>
-    <input type="file" accept=".txt" name="txt" value="" required>
-    <button type="submit" name="button_txt" value="button_txt">Submit</button>
-  </form>
-  OR
-  <br>
-  <br>
-  <form class="" action="{% url 'search' %}" method="post">
-    {% csrf_token %}
-    <label for="csv">Drop CSV File which has multiple onlion links</label>
-    <input type="file" accept=".csv" name="csv" value="" required>
-    <button type="submit" name="button_csv" value="button_csv">Submit</button>
-  </form>
+            <input type="text" class="form-control" name="link" value="" placeholder="Drop an Onion Link">
 
+            <div class="input-group-append">
+                <button class="btn btn-primary" type="submit" data-toggle="modal" data-target="#modal" name="button_link" value="button_link">Submit Link</button>
+            </div>
+        </div>
 
+        <!-- Modal -->
+        <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modal_text" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modal_text"></h5>
+                    </div>
+
+                    <div class="modal-body">
+                    </div>
+
+                    <div class="modal-footer">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+
+    <h4>OR</h4>
+
+    <form class="" action="{% url 'search' %}" method="post">
+        {% csrf_token %}
+
+        <p style="text-align:left; margin: 0% 13%;">Drop a Text file which has multiple onlion links</p>
+        <div class="input-group mb-3">
+            <div class="custom-file">
+                <input type="file" class="custom-file-input" id="textFile" accept=".txt" name="txt" value="" required>
+                <label class="custom-file-label" id="textFileLabel">Choose Text file</label>
+            </div>
+
+            <div class="input-group-append">
+                <button class="btn btn-primary" type="submit" name="button_txt" value="button_txt">Submit</button>
+            </div>
+
+            <script>
+				document.getElementById('textFile').onchange = function () {
+					document.getElementById('textFileLabel').innerHTML = this.files.item(0).name;
+				};
+            </script>
+        </div>
+    </form>
+
+    <h4>OR</h4>
+
+    <form class="" action="{% url 'search' %}" method="post">
+        {% csrf_token %}
+
+        <p style="text-align:left; margin: 0% 13%;">Drop a CSV file which has multiple onlion links</p>
+        <div class="input-group mb-3">
+            <div class="custom-file">
+                <input type="file" class="custom-file-input" accept=".csv" name="csv" id="csvFile" value="" required>
+                <label class="custom-file-label" id="csvFileLabel">Choose CSV file</label>
+            </div>
+
+            <div class="input-group-append">
+                <button class="btn btn-primary" type="submit" name="button_csv" value="button_csv">Submit</button>
+            </div>
+
+            <script>
+                document.getElementById('csvFile').onchange = function () {
+                    document.getElementById('csvFileLabel').innerHTML = this.files.item(0).name;
+                };
+            </script>
+        </div>
+    </form>
 </div>
 {% endblock %}
