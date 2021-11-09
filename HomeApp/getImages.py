@@ -83,13 +83,15 @@ class GetImages:
             links = f.readlines()
 
             self.TOTAL_IMAGES = len(links)
-
+            total_imgs = len(links)
             for link in links:
                 index = links.index(link)
                 link = link.replace('\n', '')
                 image_fetch_thread = threading.Thread(target=self.fetch_image, args=(link, img_folder_location, f'{index}',))
                 # starting thread
                 image_fetch_thread.start()
+
+        return total_imgs
 
     # below function is used in fetch_image_from_links_file() to download images
     def fetch_image(self,url, folder_name, image_index):
@@ -241,89 +243,90 @@ class GetImages:
 
       [MASTER FUCNTION]
     '''
-    def process_images(self,request,url,csrfmiddlewaretoken):
-
-        print('[NOTE] Fetching Images Link from website !')
-        # fetching image links
-        img_link_path,no_of_links,status_code = self.fetch_images_link(url,csrfmiddlewaretoken)
-
-        # print(status_code)
-        # print(no_of_links)
-
-        # if no images are found then this will return error
-        if status_code == 200 and no_of_links == 0:
-            self.ARE_ALL_IMAGES_DOWNLOADED = True
-            return render(request, 'search.html', {'error': 'No images Found On given link'})
-        # if not able to scrap any image then this will return error
-        elif status_code != 200:
-            self.ARE_ALL_IMAGES_DOWNLOADED = True
-            return render(request, 'search.html', {'error': 'Exited with status code: '+ str(status_code)})
-
-        # if everything is fine it'll move forward
-        if status_code == 200:
-
-            print('[NOTE] Downloading Images for fetched links from site !')
-            # fetching images from fetched links
-            self.fetch_image_from_links_file(csrfmiddlewaretoken,img_link_path)
-
-            print('[NOTE] Please wait until all the images are downloaded !')
-
-            while not self.ARE_ALL_IMAGES_DOWNLOADED:
-                # Waiting till all images are downloaded in all threads
-                pass
-
-            print("[NOTE]:Now We Begin Child Abuse Analysis")
-
-            # getting path & all the images in the path
-            folder_path = os.path.join(os.getcwd(),os.path.join('Data',os.path.join('images',os.path.join(csrfmiddlewaretoken))))
-            img_paths = glob.glob(folder_path + r'/*.jpg')
-
-            # if no JPG images are found error is showned
-            if len(img_paths) == 0:
-                return render(request,'search.html',{'error':'No Images Found'})
-
-            # however if JPG images are found then
-            self.TOTAL_JPG_IMAGES = len(img_paths)
-            print("Total JPG Images = "+str(self.TOTAL_JPG_IMAGES ))
-
-            # # MultiThreading 6 Min 2 sec. for 31 images (Download & Analyze)
-            #
-            # for path in img_paths:
-            #     t= threading.Thread(target=self.age_P,args=(path,))
-            #     t.start()
-            # # wait till all threads' analysis is done
-            # while not self.IS_ANANLYSIS_DONE:
-            #     print("Doing Analysis")
-            #     if len(self.results) >= 2:
-            #         self.IS_ANANLYSIS_DONE = True
-            #     else:
-            #         pass
-
-            # iterative analysis 41 sec. for 31 images (Download & Analyze)
-
-            for path in img_paths:
-                if len(self.results) >= 2:
-                    self.IS_ANANLYSIS_DONE = True
-                    break
-                if not self.IS_ANANLYSIS_DONE:
-                    self.age_P(path)
-
-            # printing results & len of results which should be max. 2 as we stop ananlysis at 2
-            pprint.pprint(self.results)
-            print(len(self.results))
-
-
-            # saving to report Database
-            self.save_report(url,csrfmiddlewaretoken)
-
-            '''
-             Write delete code,
-             which shall delete all the scraped images,
-             from Data/csrfmiddlewaretoken/images/*
-             [JEET]
-            '''
-            # if 0 is the length then Child Abusive Content is Not Found else it is found
-            if len(self.results) == 0:
-                return render(request, 'search.html',{'msg':'Child Abusive Content Not Found!'})
-            else:
-                return render(request, 'search.html',{'msg':'Child Abusive Content Found!'})
+    # def process_images(self,url,csrfmiddlewaretoken):
+    #
+    #     print('[NOTE] Fetching Images Link from website !')
+    #     # fetching image links
+    #     img_link_path,no_of_links,status_code = self.fetch_images_link(url,csrfmiddlewaretoken)
+    #
+    #     # print(status_code)
+    #     # print(no_of_links)
+    #
+    #     # if no images are found then this will return error
+    #     # if status_code == 200 and no_of_links == 0:
+    #     #     self.ARE_ALL_IMAGES_DOWNLOADED = True
+    #     #     return render(request, 'search.html', {'error': 'No images Found On given link'})
+    #     # # if not able to scrap any image then this will return error
+    #     # elif status_code != 200:
+    #     #     self.ARE_ALL_IMAGES_DOWNLOADED = True
+    #     #     return render(request, 'search.html', {'error': 'Exited with status code: '+ str(status_code)})
+    #
+    #     # if everything is fine it'll move forward
+    #
+    #     if status_code == 200:
+    #
+    #         print('[NOTE] Downloading Images for fetched links from site !')
+    #         # fetching images from fetched links
+    #         self.fetch_image_from_links_file(csrfmiddlewaretoken,img_link_path)
+    #
+    #         print('[NOTE] Please wait until all the images are downloaded !')
+    #
+    #         while not self.ARE_ALL_IMAGES_DOWNLOADED:
+    #             # Waiting till all images are downloaded in all threads
+    #             pass
+    #
+    #         print("[NOTE]:Now We Begin Child Abuse Analysis")
+    #
+    #         # getting path & all the images in the path
+    #         folder_path = os.path.join(os.getcwd(),os.path.join('Data',os.path.join('images',os.path.join(csrfmiddlewaretoken))))
+    #         img_paths = glob.glob(folder_path + r'/*.jpg')
+    #
+    #         # if no JPG images are found error is showned
+    #         # if len(img_paths) == 0:
+    #         #     return render(request,'search.html',{'error':'No Images Found'})
+    #
+    #         # however if JPG images are found then
+    #         self.TOTAL_JPG_IMAGES = len(img_paths)
+    #         print("Total JPG Images = "+str(self.TOTAL_JPG_IMAGES ))
+    #
+    #         # # MultiThreading 6 Min 2 sec. for 31 images (Download & Analyze)
+    #         #
+    #         # for path in img_paths:
+    #         #     t= threading.Thread(target=self.age_P,args=(path,))
+    #         #     t.start()
+    #         # # wait till all threads' analysis is done
+    #         # while not self.IS_ANANLYSIS_DONE:
+    #         #     print("Doing Analysis")
+    #         #     if len(self.results) >= 2:
+    #         #         self.IS_ANANLYSIS_DONE = True
+    #         #     else:
+    #         #         pass
+    #
+    #         # iterative analysis 41 sec. for 31 images (Download & Analyze)
+    #
+    #         for path in img_paths:
+    #             if len(self.results) >= 2:
+    #                 self.IS_ANANLYSIS_DONE = True
+    #                 break
+    #             if not self.IS_ANANLYSIS_DONE:
+    #                 self.age_P(path)
+    #
+    #         # printing results & len of results which should be max. 2 as we stop ananlysis at 2
+    #         pprint.pprint(self.results)
+    #         print(len(self.results))
+    #
+    #
+    #         # saving to report Database
+    #         self.save_report(url,csrfmiddlewaretoken)
+    #
+    #         '''
+    #          Write delete code,
+    #          which shall delete all the scraped images,
+    #          from Data/csrfmiddlewaretoken/images/*
+    #          [JEET]
+    #         '''
+    #         # if 0 is the length then Child Abusive Content is Not Found else it is found
+    #         # if len(self.results) == 0:
+    #         #     return render(request, 'search.html',{'msg':'Child Abusive Content Not Found!'})
+    #         # else:
+    #         #     return render(request, 'search.html',{'msg':'Child Abusive Content Found!'})
