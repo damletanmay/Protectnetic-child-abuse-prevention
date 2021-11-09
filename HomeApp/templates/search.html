@@ -26,15 +26,6 @@ Search
 
 {% block content %}
 
-{% if msg %}
-    <h3 class="alert alert-primary">{{ msg }}</h3>
-{% endif %}
-
-
-{% if error %}
-    <h3 class="alert alert-danger">{{ error }}</h3>
-{% endif %}
-
 <div class="container text-center">
     <div class='progress-wrapper'>
         <div id='progress-bar' class='progress-bar' style="background-color: #68a9ef; width: 0%;">&nbsp;</div>
@@ -55,27 +46,22 @@ Search
             <input type="text" class="form-control" name="link" value="" placeholder="Drop an Onion Link">
 
             <div class="input-group-append">
-                <button class="btn btn-primary" type="submit" data-toggle="modal" data-target="#modal" name="button_link" value="button_link">Submit Link</button>
+              <button type="submit" data-toggle="modal"  data-target ="#modal" name="button_link" value="button_link" class="btn btn-primary" >Submit Link</button>
             </div>
         </div>
 
         <!-- Modal -->
         <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modal_text" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modal_text"></h5>
-                    </div>
-
-                    <div class="modal-body">
-                    </div>
-
-                    <div class="modal-footer">
-                    </div>
-                </div>
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="modal_text"></h5>
+              </div>
+              <div class="modal-body">
+              </div>
             </div>
+          </div>
         </div>
-
     </form>
 
     <h4>OR</h4>
@@ -83,7 +69,7 @@ Search
     <form class="" action="{% url 'search' %}" method="post">
         {% csrf_token %}
 
-        <p style="text-align:left; margin: 0% 13%;">Drop a Text file which has multiple onlion links</p>
+        <p style="text-align:left; margin: 0% 13%;">Drop a Text file which has multiple onion links</p>
         <div class="input-group mb-3">
             <div class="custom-file">
                 <input type="file" class="custom-file-input" id="textFile" accept=".txt" name="txt" value="" required>
@@ -104,10 +90,10 @@ Search
 
     <h4>OR</h4>
 
-    <form class="" action="{% url 'search' %}" method="post">
+    <form  action="{% url 'search' %}" method="post">
         {% csrf_token %}
 
-        <p style="text-align:left; margin: 0% 13%;">Drop a CSV file which has multiple onlion links</p>
+        <p style="text-align:left; margin: 0% 13%;">Drop a CSV file which has multiple onion links</p>
         <div class="input-group mb-3">
             <div class="custom-file">
                 <input type="file" class="custom-file-input" accept=".csv" name="csv" id="csvFile" value="" required>
@@ -126,4 +112,5 @@ Search
         </div>
     </form>
 </div>
+
 {% endblock %}

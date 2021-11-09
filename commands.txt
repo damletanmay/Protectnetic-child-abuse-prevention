@@ -1,0 +1,7 @@
+For Django
+
+To run = python manage.py runserver
+To migrate =  python manage.py makemigrations, python manage.py migrate
+
+
+For Celery = celery -A Manthan_Hackathon worker -l info -P solo

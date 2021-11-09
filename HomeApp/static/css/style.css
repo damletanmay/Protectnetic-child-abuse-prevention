@@ -104,4 +104,11 @@ h4 {
 	font-size: 120%;
 }
 
+.modal{
+	background-color: black;
+}
+#modal_text{
+	color: black;
+}
+
 /* Card ends*/

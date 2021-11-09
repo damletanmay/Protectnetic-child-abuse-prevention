@@ -35,23 +35,23 @@ function customProgress(progressBarElement, progressBarMessageElement, progress)
   function check_link() {
     var link_element = document.getElementsByName('link')[0];
     var link = link_element.value;
-    var model_text = document.getElementById('modal_text');
+    var modal_text = document.getElementById('modal_text');
     console.log(link);
 
     if (link.length === 0) {
-      model_text.innerHTML = "Enter A Link!";
+      modal_text.innerHTML = "Enter A Link!";
       link_element.click();
       return false;
     } else {
       // Validate The Link
       if (link.endsWith(".onion")) {
-        model_text.innerHTML = "Wait for a while, while we process the link ...";
+        modal_text.innerHTML = "Wait for a while, while we process the link ...";
         // Show Progress Bar Here
         document.getElementsByName('link_form')[0].submit();
         link_element.click();
         return true;
       } else {
-        model_text.innerHTML = "Enter An Onion Link!";
+        modal_text.innerHTML = "Enter An Onion Link!";
         link_element.click();
         return false;
       }
