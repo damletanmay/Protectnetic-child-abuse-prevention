@@ -31,7 +31,7 @@ Search
         <div id='progress-bar' class='progress-bar' style="background-color: #68a9ef; width: 0%;">&nbsp;</div>
     </div>
 
-    <div id="progress-bar-message"></div>
+    <h3 id="progress-bar-message"></h3>
     <div id="celery-result"></div>
 
     <form class="" name="link_form" onsubmit="return check_link()" action="{% url 'search' %}" method="post">
@@ -69,7 +69,7 @@ Search
     <form class="" action="{% url 'search' %}" method="post">
         {% csrf_token %}
 
-        <p style="text-align:left; margin: 0% 13%;">Drop a Text file which has multiple onion links</p>
+        <p style="text-align:left; margin: 0% 13%;">Drop a Text file which has multiple Onion links</p>
         <div class="input-group mb-3">
             <div class="custom-file">
                 <input type="file" class="custom-file-input" id="textFile" accept=".txt" name="txt" value="" required>
@@ -93,7 +93,7 @@ Search
     <form  action="{% url 'search' %}" method="post">
         {% csrf_token %}
 
-        <p style="text-align:left; margin: 0% 13%;">Drop a CSV file which has multiple onion links</p>
+        <p style="text-align:left; margin: 0% 13%;">Drop a CSV file which has multiple Onion links</p>
         <div class="input-group mb-3">
             <div class="custom-file">
                 <input type="file" class="custom-file-input" accept=".csv" name="csv" id="csvFile" value="" required>

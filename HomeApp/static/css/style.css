@@ -39,7 +39,7 @@ body {
 		margin: 1%;
 		text-transform: uppercase;
 		text-align: center;
-		text-shadow: 2px 2px 2px black;
+		letter-spacing: 5px;
 	}
 
 	.navbar li {
@@ -57,9 +57,22 @@ body {
 	margin: 1% auto;
 }
 
+.btn-primary {
+	border-radius: 0px 5px 5px 0px !important;
+}
+
 h4 {
 	margin: 3% !important;
 	font-weight: bold !important;
+}
+
+.progress-wrapper {
+	margin: auto;
+	width: 75%;
+}
+
+#progress-bar {
+	border-radius: 10px;
 }
 
 .container {
@@ -67,12 +80,22 @@ h4 {
 	width: 100%;
 }
 
-.alert {
+#progress-bar-message {
 	text-align: center;
-	width: auto;
-	margin: 1% 25%;
+	width: 75%;
+	margin: auto;
 	margin-top: 2%;
 	box-shadow: 2px 2px 2px;
+}
+
+#celery-result {
+	margin: 2% auto;
+	text-align: left;
+	color: rgb(255 255 255 / 75%);
+}
+
+form > p {
+	font-weight: bold;
 }
 
 /* Card starts*/
@@ -104,11 +127,13 @@ h4 {
 	font-size: 120%;
 }
 
-.modal{
+/* Card ends*/
+
+.modal {
 	background-color: black;
 }
-#modal_text{
-	color: black;
-}
 
-/* Card ends*/
+#modal_text {
+	color: black;
+	font-weight: bold;
+}

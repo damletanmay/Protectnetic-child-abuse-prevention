@@ -39,7 +39,7 @@ function customProgress(progressBarElement, progressBarMessageElement, progress)
     console.log(link);
 
     if (link.length === 0) {
-      modal_text.innerHTML = "Enter A Link!";
+      modal_text.innerHTML = "Enter a Link!";
       link_element.click();
       return false;
     } else {
