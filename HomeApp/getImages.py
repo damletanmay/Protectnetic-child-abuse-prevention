@@ -40,6 +40,8 @@ class GetImages:
         if 'http' not in url:
             url = 'http://' + url
 
+        print ("url" + url)
+
         html_data_res = res.get(url)
 
         if html_data_res.status_code == 200:

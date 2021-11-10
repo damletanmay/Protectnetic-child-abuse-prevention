@@ -41,6 +41,7 @@ function customProgress(progressBarElement, progressBarMessageElement, progress)
     if (link.length === 0) {
       modal_text.innerHTML = "Enter a Link!";
       link_element.click();
+      link_element.value = "";
       return false;
     } else {
       // Validate The Link
@@ -53,6 +54,7 @@ function customProgress(progressBarElement, progressBarMessageElement, progress)
       } else {
         modal_text.innerHTML = "Enter An Onion Link!";
         link_element.click();
+        link_element.value = "";
         return false;
       }
     }
