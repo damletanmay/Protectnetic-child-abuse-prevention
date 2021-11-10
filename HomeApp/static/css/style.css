@@ -54,7 +54,7 @@ body {
 
 .input-group {
 	width: 75% !important;
-	margin: 1% auto;
+	margin: 1% auto 3% !important;
 }
 
 .btn-primary {
@@ -82,10 +82,14 @@ h4 {
 
 #progress-bar-message {
 	text-align: center;
-	width: 75%;
+	width: 60%;
+	font-size: 1.25rem;
 	margin: auto;
 	margin-top: 2%;
-	box-shadow: 2px 2px 2px;
+	color: #004085;
+	background-color: #cce5ff;
+	border-color: #b8daff;
+	border-radius: 0.25rem;
 }
 
 #celery-result {
