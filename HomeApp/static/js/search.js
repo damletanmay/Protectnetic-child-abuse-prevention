@@ -15,24 +15,21 @@ function customProgress(progressBarElement, progressBarMessageElement, progress)
   } else {
       progressBarMessageElement.textContent = progress.description;
   }
-    console.log(progressBarElement);
-    console.log(progressBarMessageElement);
-    console.log(progress);
     progressBarElement.style.width = String(progress.percent) + "%";
     progressBarElement.style.background = this.barColors.progress;
   }
 
-  function customSuccess(progressBarElement, progressBarMessageElement) {
+function customSuccess(progressBarElement, progressBarMessageElement) {
     progressBarElement.style.background = this.barColors.success;
     progressBarMessageElement.innerHTML = 'Completed!';
   }
 
-  function customError(progressBarElement, progressBarMessageElement) {
+function customError(progressBarElement, progressBarMessageElement) {
     progressBarElement.style.background = this.barColors.error;
     progressBarMessageElement.innerHTML = 'Something Went Wrong!';
   }
 
-  function check_link() {
+function check_link() {
     var link_element = document.getElementsByName('link')[0];
     var link = link_element.value;
     var modal_text = document.getElementById('modal_text');
@@ -45,17 +42,9 @@ function customProgress(progressBarElement, progressBarMessageElement, progress)
       return false;
     } else {
       // Validate The Link
-      if (link.endsWith(".onion")) {
-        modal_text.innerHTML = "Wait for a while, while we process the link ...";
-        // Show Progress Bar Here
-        document.getElementsByName('link_form')[0].submit();
-        link_element.click();
-        return true;
-      } else {
-        modal_text.innerHTML = "Enter An Onion Link!";
-        link_element.click();
-        link_element.value = "";
-        return false;
-      }
+      modal_text.innerHTML = "Wait for a while, while we process the link ...";
+      document.getElementsByName('link_form')[0].submit();
+      link_element.click();
+      return true;
     }
 }

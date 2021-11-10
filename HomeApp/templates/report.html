@@ -9,11 +9,41 @@ Report
 {% endblock %}
 
 {% block content %}
-<div class="card">
+<!-- <div class="card">
 	<h2 class="card-header">Report</h2>
 
 	<div class="card-body">
 		<p>[[ - Report Goes Here - ]]</p>
 	</div>
-</div>
+</div> -->
+
+<div class="container">
+
+	<section>
+			<table class="table table-active table-hover">
+				<thead class="bg-dark">
+					<tr>
+						<th>Link</th>
+						<th>Child Abuse Content</th>
+						<th>Download Report</th>
+					</tr>
+				</thead>
+
+				<tbody>
+					{% for report in reports %}
+					<tr>
+						<td>{{ report.link }}</td>
+						{% if report.result  %}
+						<td>Found</td>
+						{% else %}
+						<td>Not Found</td>
+						{% endif %}
+						<td> <a href="{{ report.pdf_report.url }}" class="badge badge-success" download>Download</a></td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</section>
+	</div>
+
 {% endblock %}

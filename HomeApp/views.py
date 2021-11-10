@@ -1,8 +1,9 @@
-from django.shortcuts import render, redirect
 import os
-from . import getImages
 import time
+from . import getImages
+from .models import Report
 from .tasks import process_images
+from django.shortcuts import render, redirect
 
 def root(request):
     return render(request, 'index.html')
@@ -16,15 +17,14 @@ def handle_link(request):
     link = request.POST.get('link')
 
     result = process_images.delay(link,csrfmiddlewaretoken)
-    return render(request,'search.html',context={'task_id': result.task_id})
+    print(result) # task id
+    return render(request,'search.html',context={'task_id': result.task_id,'csrfmiddlewaretoken': csrfmiddlewaretoken})
 
 def handle_txt(request):
     return render(request, 'search.html')
 
-
 def handle_csv(request):
     return render(request, 'search.html')
-
 
 def search(request):
     if request.method == 'GET':
@@ -42,6 +42,6 @@ def search(request):
         elif csv:
             return handle_csv(request)
 
-
 def report(request):
-    return render(request, 'report.html')
+    reports = Report.objects.all()
+    return render(request, 'report.html',{'reports':reports})

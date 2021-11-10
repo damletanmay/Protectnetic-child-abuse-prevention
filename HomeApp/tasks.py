@@ -4,12 +4,23 @@ import pprint
 from celery import shared_task
 from .getImages import GetImages
 from celery_progress.backend import ProgressRecorder
+from .report import generate_report
+
+'''
+     This method is to process images,
+      which will handle Downloading images,
+      & send them into Analysis.
+
+      [MASTER FUCNTION]
+'''
 
 @shared_task(bind=True)
 def process_images(self,link,csrfmiddlewaretoken):
+
     progress = ProgressRecorder(self)
     print("Processing Started!")
     object = GetImages()
+
     print('[NOTE] Fetching Images Link from website !')
     # fetching image links
     progress.set_progress(100,100,f'Fetching Links From The given Website')
@@ -31,11 +42,11 @@ def process_images(self,link,csrfmiddlewaretoken):
             progress.set_progress(total_imgs - object.TOTAL_IMAGES,total_imgs,f'Downloading Images... ')
 
 
-        print("[NOTE]:Now We Begin Child Abuse Analysis")
+        print("[NOTE]:Now We Begin Image Analysis for Detecting Child Abuse")
 
         # getting path & all the images in the path
-        folder_path = os.path.join(os.getcwd(),os.path.join('Data',os.path.join('images',os.path.join(csrfmiddlewaretoken))))
-        img_paths = glob.glob(folder_path + r'/*.jpg')
+        img_folder_path = os.path.join(os.getcwd(),os.path.join('Data',os.path.join('images',os.path.join(csrfmiddlewaretoken))))
+        img_paths = glob.glob(img_folder_path + r'/*.jpg')
 
         # if no JPG images are found error is showned
         if len(img_paths) == 0:
@@ -64,17 +75,22 @@ def process_images(self,link,csrfmiddlewaretoken):
 
         # saving to report Database
         progress.set_progress(100,100,f'Generating Report ...')
-        object.save_report(link,csrfmiddlewaretoken)
+
+        # generate report
+        report_path = generate_report(link,csrfmiddlewaretoken,object.results)
+
         progress.set_progress(100,100,f'Saving Report to database ...')
+
         '''
          Write delete code,
-         which shall delete all the scraped images,
-         from Data/csrfmiddlewaretoken/images/*
+         which shall delete all the scraped images & the links,
+         from Data/images/csrfmiddlewaretoken/* &
+         Data/links/csrfmiddlewaretoken/link/img_links.txt
          [JEET]
         '''
 
         # if 0 is the length then Child Abusive Content is Not Found else it is found
         if len(object.results) == 0:
-            return 'Child Abusive Content Not Found!'
+            return [0,report_path]
         else:
-            return 'Child Abusive Content Found!'
+            return [1,report_path]

@@ -9,12 +9,24 @@ Search
 <script src="{% static 'js/search.js' %}" charset="utf-8"></script>
 <script src="{% static 'celery_progress/celery_progress.js' %}"></script>
 <script type="text/javascript">
+
+    function customResult(resultElement, result){
+          console.log(resultElement);
+          console.log(result);
+          let rb = result[0];
+          let pdf_report = result[1];
+          console.log(pdf_report);
+          var url = 'media/'+ pdf_report;
+          resultElement.innerHTML = "Click <a href =" + url +  " download >Here</a> to download report";
+        }
+
     document.addEventListener("DOMContentLoaded", function () {
         {% if task_id %}
         var progressUrl = "{% url 'celery_progress:task_status' task_id %}";
         CeleryProgressBar.initProgressBar(progressUrl, {
             onProgress: customProgress,
             onSuccess: customSuccess,
+            onResult:customResult,
             onError: customError,
             barColors: customBarColors,
         });
