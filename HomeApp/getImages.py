@@ -40,7 +40,7 @@ class GetImages:
             url = 'http://' + url
 
         html_data_res = res.get(url)
-
+        print(html_data_res.status_code)
         if html_data_res.status_code == 200:
 
             soup = BeautifulSoup(html_data_res.content, 'lxml')
