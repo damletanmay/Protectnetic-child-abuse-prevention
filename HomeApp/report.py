@@ -122,19 +122,74 @@ def save_pdf(link,csrfmiddlewaretoken,blur_img_1_path,blur_img_2_path,results):
             pdf.multi_cell(col_width, line_height, datum, border=1, ln=3, max_line_height=pdf.font_size)
 
         pdf.ln(line_height)
-    pdf.ln()
 
-    # [REMAINING] image code goes here along with displaying p & s content
-    # img = Image.open(blur_img_1_path)
-    # img = img.crop((10, 10, 490, 490)).resize((96, 96), resample=Image.NEAREST)
-    # pdf.image(img, x = 80, y=100)
+    pdf.set_font("Times","B",size = 12)
+    pdf.ln()
+    # images
+
+    pdf.line(x1=195, y1=100, x2=10, y2=100)
+
+    if blur_img_1_path:
+        images = []
+        for key,value in results.items():
+            images.append(key)
+
+        sub_dict = results[images[0]]
+        p_content_1 = sub_dict['porn']*100
+        s_content_1 = sub_dict['sexy']*100
+
+        if len(images) == 2:
+            sub_dict = results[images[1]]
+            p_content_2 = sub_dict['porn']*100
+            s_content_2 = sub_dict['sexy']*100
+
+
+        pdf.ln()
+        pdf.cell(70,12,'Image - 1',align = 'R')
+        pdf.ln()
+        pdf.cell(70,12,f"P-content: {p_content_1}%",align="R")
+        pdf.ln()
+        pdf.cell(70,12,f"S-content: {s_content_1}%",align="R")
+        pdf.ln()
+
+        img1 = Image.open(blur_img_1_path)
+        size=(200,200)
+        img1 = img1.resize(size)
+        pdf.image(img1, x = 90, y = 110)
+        pdf.ln()
+
+        pdf.line(x1=195, y1=190, x2=10, y2=190)
+        pdf.ln()
+
+    if blur_img_2_path:
+        pdf.ln()
+        pdf.ln()
+        pdf.ln()
+        pdf.cell(70,12,'Image - 2',align = 'R')
+        pdf.ln()
+        pdf.cell(70,12,f"P-content: {p_content_2}%",align="R")
+        pdf.ln()
+        pdf.cell(70,12,f"S-content: {s_content_2}%",align="R")
+        pdf.ln()
+
+        img2 = Image.open(blur_img_2_path)
+        size=(200,200)
+        img2 = img2.resize(size)
+        pdf.image(img2, x = 90, y = 200)
+        pdf.ln()
+
+        pdf.line(x1=195, y1=280, x2=10, y2=280)
+
 
     pdf_folder_path = os.path.join(os.path.join(os.getcwd(),"media"),"pdf_reports")
     if not os.path.exists(pdf_folder_path):
         os.makedirs(pdf_folder_path)
+
     pdf_path = os.path.join(pdf_folder_path,csrfmiddlewaretoken+".pdf")
     pdf.output(pdf_path)
     return pdf_path
+
+
 # Flow of below function
 # 1 Zip original_img & save it
 # 2 Encrypt the zip file & save it
