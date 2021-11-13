@@ -4,7 +4,8 @@ To run = python manage.py runserver
 To migrate =  python manage.py makemigrations then python manage.py migrate
 To make a superuser(admin account) = python manage.py createsuperuser
 
-For Celery = celery -A Manthan_Hackathon worker -l info -P solo
+For Celery = celery -A Manthan_Hackathon worker -l info -P threads
 
+Required Softwares
 Tor
 Redis

@@ -13,3 +13,9 @@ class Report(models.Model):
 
     def __str__(self):
         return str(self.id)
+
+class File(models.Model):
+    id = models.AutoField(primary_key=True)
+    file = models.FileField(default = None, blank=True, null=True,upload_to = 'files')
+    def __str__(self):
+        return str(self.id)

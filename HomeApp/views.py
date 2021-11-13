@@ -1,8 +1,10 @@
 import os
 import time
+import pprint
 from . import getImages
+from .models import File
 from .models import Report
-from .tasks import process_images
+from .tasks import process_link,process_file
 from django.shortcuts import render, redirect
 
 def root(request):
@@ -16,15 +18,31 @@ def handle_link(request):
 
     link = request.POST.get('link')
 
-    result = process_images.delay(link,csrfmiddlewaretoken)
+    result = process_link.delay(link,csrfmiddlewaretoken)
     print(result) # task id
-    return render(request,'search.html',context={'task_id': result.task_id,'csrfmiddlewaretoken': csrfmiddlewaretoken})
+    return render(request,'search.html',context={'task_id': result.task_id})
 
-def handle_txt(request):
-    return render(request, 'search.html')
+def handle_file(request,isTXT):
+    req_dict = dict(request.POST.items())
+    csrfmiddlewaretoken_main = req_dict['csrfmiddlewaretoken']
 
-def handle_csv(request):
-    return render(request, 'search.html')
+    if isTXT:
+        user_file = request.FILES['txt']
+    else:
+        user_file =  request.FILES['csv']
+
+    print(user_file.name)
+
+    files = File()
+    files.file = user_file
+    files.save()
+
+    path = os.path.join(os.path.join(os.getcwd(),"media"),files.file.name)
+    print(path)
+
+    result = process_file.delay(files.file.name,path,csrfmiddlewaretoken_main)
+    print(result) # task id
+    return render(request,'search.html',context={'task_id': result.task_id})
 
 def search(request):
     if request.method == 'GET':
@@ -38,9 +56,9 @@ def search(request):
         if link:
             return handle_link(request)
         elif txt:
-            return handle_txt(request)
+            return handle_file(request,1)
         elif csv:
-            return handle_csv(request)
+            return handle_file(request,0)
 
 def report(request):
     reports = Report.objects.all()
