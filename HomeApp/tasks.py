@@ -1,4 +1,5 @@
 import os
+from os import walk
 import glob
 import pprint
 import pandas as pd
@@ -55,11 +56,22 @@ def process_link(self,link,csrfmiddlewaretoken):
         print("[NOTE]:Now We Begin Image Analysis for Detecting Child Abuse")
 
         # getting path & all the images in the path
+        all_images_folder = os.path.join(os.getcwd(),os.path.join('Data','images'))
         img_folder_path = os.path.join(os.getcwd(),os.path.join('Data',os.path.join('images',os.path.join(csrfmiddlewaretoken))))
         img_paths = glob.glob(img_folder_path + r'/*.jpg')
 
         # if no JPG images are found error is showned
         if len(img_paths) == 0:
+
+            #Deleting all other downloaded images with different format !                
+            for root,dirs,file in walk(all_images_folder):
+                for f in file:
+                    os.remove(os.path.join(root,f))
+            for root,dirs,file in walk(all_images_folder):
+                if len(dirs) != 0:
+                    for dir in dirs:
+                        os.rmdir(os.path.join(root,dir))  
+
             return ['No Images Found',0]
 
         # however if JPG images are found then
@@ -96,8 +108,13 @@ def process_link(self,link,csrfmiddlewaretoken):
          which shall delete all the scraped images & the links,
          from Data/images/csrfmiddlewaretoken/* &
          Data/links/csrfmiddlewaretoken/link/img_links.txt
-         [JEET]
-        '''
+         [JEET]'''
+        progress.set_progress(100,100,f'Deleting fetched images ...')
+
+        for root,dirs,file in walk(img_folder_path):
+            for f in file:
+                os.remove(os.path.join(img_folder_path,f))
+            os.rmdir(img_folder_path) 
 
         # if 0 is the length then Child Abusive Content is Not Found else it is found
         if len(object.results) == 0:
@@ -207,13 +224,6 @@ def p_l(link,csrfmiddlewaretoken):
             # generate report
             report_path = generate_report(link,csrfmiddlewaretoken,object.results)
 
-            '''
-             Write delete code,
-             which shall delete all the scraped images & the links,
-             from Data/images/csrfmiddlewaretoken/* &
-             Data/links/csrfmiddlewaretoken/link/img_links.txt
-             [JEET]
-            '''
 
             # if 0 is the length then Child Abusive Content is Not Found else it is found
             if len(object.results) == 0:
