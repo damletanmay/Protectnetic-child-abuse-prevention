@@ -45,6 +45,7 @@ def age_gender_detector(frame, ageNet, faceNet, padding, MODEL_MEAN_VALUES, ageL
         return age
 
 
+# to detect age & p content
 def detect_age_and_p(path):
     # setting up
     MODEL_MEAN_VALUES = (78.4263377603, 87.7689143744, 114.895847746)
@@ -62,7 +63,7 @@ def detect_age_and_p(path):
     faceNet = cv.dnn.readNet(faceModel, faceProto)
 
 
-    analysis = {}
+    analysis = {} # o/p
 
     input = cv.imread(path)
     print(path)

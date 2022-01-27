@@ -185,7 +185,8 @@ def save_pdf(link,csrfmiddlewaretoken,blur_img_1_path,blur_img_2_path,results):
     if not os.path.exists(pdf_folder_path):
         os.makedirs(pdf_folder_path)
 
-    pdf_path = os.path.join(pdf_folder_path,csrfmiddlewaretoken+".pdf")
+    file_name = csrfmiddlewaretoken+".pdf"
+    pdf_path = os.path.join(pdf_folder_path,file_name)
     pdf.output(pdf_path)
     return pdf_path
 
@@ -237,8 +238,6 @@ def generate_report(link,csrfmiddlewaretoken,results):
 
         if not os.path.exists(save_blur_images_path):
          os.makedirs(save_blur_images_path)
-
-
 
          # blurring first image
         blur_image(images[0],img_1)

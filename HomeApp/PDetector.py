@@ -65,6 +65,7 @@ def classify_nd(model, nd_images):
         probs.append(single_probs)
     return probs
 
+# function to detect p content
 def p_detect(path):
     IMAGE_DIM = 224   # required/default image dimensionality
     predictions = []
