@@ -55,6 +55,7 @@ def zip_images(csrfmiddlewaretoken,img_1_path,img_2_path):
     zip_folder_path = os.path.join(os.path.join(os.getcwd(),"media"),"encrypted_zip_files")
     zip_path = os.path.join(zip_folder_path,csrfmiddlewaretoken+".zip")
     encrypted_zip_path = os.path.join(zip_folder_path,csrfmiddlewaretoken+"_encrypted")
+    save_path = os.path.join("encrypted_zip_files",csrfmiddlewaretoken+"_encrypted")
     public_key = settings.PUBLIC_KEY
 
     if not os.path.exists(zip_folder_path):
@@ -71,7 +72,7 @@ def zip_images(csrfmiddlewaretoken,img_1_path,img_2_path):
 
     os.remove(zip_path) # delete the original zip without encryption
 
-    return encrypted_zip_path
+    return save_path
 
 def blur_image(path,blur_img_path):
     img_src = path
@@ -186,9 +187,10 @@ def save_pdf(link,csrfmiddlewaretoken,blur_img_1_path,blur_img_2_path,results):
         os.makedirs(pdf_folder_path)
 
     file_name = csrfmiddlewaretoken+".pdf"
+    save_path = os.path.join("pdf_reports",file_name)
     pdf_path = os.path.join(pdf_folder_path,file_name)
     pdf.output(pdf_path)
-    return pdf_path
+    return save_path
 
 
 # Flow of below function
@@ -241,9 +243,10 @@ def generate_report(link,csrfmiddlewaretoken,results):
 
          # blurring first image
         blur_image(images[0],img_1)
-
+        save_img_1 = os.path.join('report_images',csrfmiddlewaretoken + '_1.jpg')
+        save_img_2 = os.path.join('report_images',csrfmiddlewaretoken + '_2.jpg')
         if len(results) == 1 and len(images) == 1:
-            report.img_1 = img_1
+            report.img_1 = save_img_1
             report.img_2 = None
             report.zip = zip_images(csrfmiddlewaretoken,images[0],None)
             pdf_report = save_pdf(link,csrfmiddlewaretoken,img_1,None,results)
@@ -252,8 +255,8 @@ def generate_report(link,csrfmiddlewaretoken,results):
         elif len(results) == 2 and len(images) == 2:
              # blurring second image only if found
              blur_image(images[1],img_2)
-             report.img_1 = img_1
-             report.img_2 = img_2
+             report.img_1 = save_img_1
+             report.img_2 = save_img_2
              report.zip = zip_images(csrfmiddlewaretoken,images[0],images[1])
              pdf_report = save_pdf(link,csrfmiddlewaretoken,img_1,img_2,results)
              report.pdf_report = pdf_report

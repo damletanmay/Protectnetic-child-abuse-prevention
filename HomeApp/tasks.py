@@ -1,12 +1,12 @@
 import os
-from os import walk
 import glob
 import pprint
 import pandas as pd
+from os import walk
 from celery import shared_task
 from .getImages import GetImages
-from celery_progress.backend import ProgressRecorder
 from .report import generate_report
+from celery_progress.backend import ProgressRecorder
 
 '''
      Below method is to process images,
