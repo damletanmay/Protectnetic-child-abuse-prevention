@@ -132,9 +132,9 @@ def process_file(self,file,path,csrfmiddlewaretoken_main):
     elif file.endswith(".csv"):
         links = pd.read_csv(path)['Links']
 
-    # print(links)
+    print(links)
     # print(len(links))
-    links_improved = [link for link in links if link != ['\n']]
+    links_improved = [link.replace('\n','') for link in links]
     total_links = len(links_improved)
     total_generated_reports = 0
     report_links = []
