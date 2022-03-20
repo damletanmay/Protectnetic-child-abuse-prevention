@@ -132,7 +132,7 @@ def process_link(self,link,csrfmiddlewaretoken,is_file = None):
             # child Abuse detected
             if not is_file:
                 progress.set_progress(100,100,f'Generating Report ...')
-            report_path = generate_report(link,csrfmiddlewaretoken,None)
+            report_path = generate_report(link,csrfmiddlewaretoken,None,is_nlp=True)
             return [report_path,1]
 
 
